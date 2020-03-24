@@ -24,13 +24,11 @@ hh <- hclust(dist(data_m))
 data_m_Ordered <- data_m[hh$order,]
 par(mfrow = c(1,3))
 
-image(t(data_m_Ordered),40:1,,xlab = "The Row Mean", ylab = "Raw",pch = 19)
-
 plot(rowMeans(data_m),40:1,,xlab = "The Row Mean", ylab = "Raw",pch = 19)
 
 
 
-#lab knn1
+#----- lab knn1 -----
 
 nyt1 <- read.csv("nyt1.csv")
 nnyt1<-dim(nyt1)[1]
@@ -46,5 +44,26 @@ true.labels<-nyt1$Gender[testing]
 classif<-knn(train,test,cg,k=5)
 classif
 attributes(.Last.value)
+
+# ----- rpart -----
+require(rpart)
+data(swiss)
+swiss_rpart <- rpart(Fertility ~ Agriculture + Education + Catholic, data = swiss)
+plot(swiss_rpart) # try some different plot options
+text(swiss_rpart) # try some different text options
+
+
+
+# ----- tree ----- 
+require(party)
+
+treeSwiss<-ctree(Fertility ~ ., data=swiss)
+plot(treeSwiss)
+
+
+treeFert<-ctree(Fertility ~ Agriculture + Education + Catholic, data = swiss)
+
+cforest(Fertility ~ Agriculture + Education + Catholic, data = swiss, controls=cforest_control(mtry=2, mincriterion=0))
+
 
 
